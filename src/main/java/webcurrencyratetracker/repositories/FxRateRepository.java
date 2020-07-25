@@ -1,7 +1,7 @@
-package repositories;
+package webcurrencyratetracker.repositories;
 
-import models.Currency;
-import models.FxRate;
+import webcurrencyratetracker.models.Currency;
+import webcurrencyratetracker.models.FxRate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,12 +13,10 @@ import java.util.List;
 @Repository
 public interface FxRateRepository extends JpaRepository<FxRate, Long> {
 
-    // This query is used to get all exchange rate history between 2 currencies
-    // Since all source currencies are EUR, for now this won't work if the target currency is EUR
+    // This query is used to get all exchange rate history between EUR and specified currency
     // TODO: Sort by date and add new method to filter by date
-    @Query("SELECT f FROM FxRate f WHERE f.sourceCurrency = :sourceCurrency AND f.targetCurrency = :targetCurrency ")
-    List<FxRate> findFxRatesBySourceCurrencyAndTargetCurrency(
-            @Param("sourceCurrency") Currency sourceCurrency,
+    @Query("SELECT f FROM FxRate f WHERE f.targetCurrency = :targetCurrency ")
+    List<FxRate> findFxRatesByTargetCurrency(
             @Param("targetCurrency") Currency targetCurrency);
 
     @Query("SELECT f FROM FxRate f WHERE f.date = :date ")

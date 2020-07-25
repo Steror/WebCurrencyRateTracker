@@ -1,13 +1,13 @@
-package controllers;
+package webcurrencyratetracker.controllers;
 
-import models.Currency;
-import models.FxRate;
+import webcurrencyratetracker.models.Currency;
+import webcurrencyratetracker.models.FxRate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import services.FxRateService;
+import webcurrencyratetracker.services.FxRateService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,9 +25,8 @@ public class FxRateController {
 
     @GetMapping(path="/FxRatesHistory")
     public List<FxRate> getFxRatesHistory(
-            @RequestBody Currency sourceCurrency,
             @RequestBody Currency targetCurrency) {
-        return service.findFxRateHistory(sourceCurrency, targetCurrency);
+        return service.findFxRateHistory(targetCurrency);
     }
 
     @GetMapping(path="/FxRates")

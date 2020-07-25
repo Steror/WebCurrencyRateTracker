@@ -1,4 +1,4 @@
-package models;
+package webcurrencyratetracker.models;
 
 public enum Currency {
     EUR,

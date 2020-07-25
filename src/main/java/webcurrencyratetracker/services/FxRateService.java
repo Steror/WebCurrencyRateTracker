@@ -1,10 +1,10 @@
-package services;
+package webcurrencyratetracker.services;
 
-import models.Currency;
-import models.FxRate;
+import webcurrencyratetracker.models.Currency;
+import webcurrencyratetracker.models.FxRate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repositories.FxRateRepository;
+import webcurrencyratetracker.repositories.FxRateRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,9 +18,9 @@ public class FxRateService {
         this.repository = repository;
     }
 
-    // Find all entries for given source and target currency
-    public List<FxRate> findFxRateHistory(final Currency sourceCurrency, final Currency targetCurrency) {
-        return repository.findFxRatesBySourceCurrencyAndTargetCurrency(sourceCurrency, targetCurrency);
+    // Find all entries for EUR and target currency
+    public List<FxRate> findFxRateHistory(final Currency targetCurrency) {
+        return repository.findFxRatesByTargetCurrency(targetCurrency);
     }
 
     // Find all fx rates for specified date
@@ -32,4 +32,9 @@ public class FxRateService {
 //    public FxRate findFxRateForCurrenciesToday(final Currency sourceCurrency, final Currency targetCurrency) {
 //        return repository.findFxRateByDateAndSourceCurrencyAndTargetCurrency(LocalDate.now(), sourceCurrency, targetCurrency);
 //    }
+
+    // Save a list of FxRates
+    public void saveFxRates(final List<FxRate> fxRates) {
+        repository.saveAll(fxRates);
+    }
 }
