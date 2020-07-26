@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="fxrates" uuid="5137accf-fa64-4553-a01b-b1792b1e6e6b">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:C:\Users\Steror\Documents\GitHub\WebCurrencyRateTracker\data/fxrates;AUTO_SERVER=TRUE</jdbc-url>
+    </data-source>
+  </component>
+</project>

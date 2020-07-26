@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webcurrencyratetracker.repositories.FxRateRepository;
 
+import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class FxRateService {
     }
 
     // Find all entries for EUR and target currency
-    public List<FxRate> findFxRateHistory(final Currency targetCurrency) {
+    public List<FxRate> findFxRatesForCurrency(final Currency targetCurrency) {
         return repository.findFxRatesByTargetCurrency(targetCurrency);
     }
 
@@ -35,6 +36,9 @@ public class FxRateService {
 
     // Save a list of FxRates
     public void saveFxRates(final List<FxRate> fxRates) {
+        fxRates.removeIf(fxRate ->
+                repository.existsBySourceCurrencyAndTargetCurrencyAndDate(
+                        fxRate.getSourceCurrency(), fxRate.getTargetCurrency(), fxRate.getDate()));
         repository.saveAll(fxRates);
     }
 }

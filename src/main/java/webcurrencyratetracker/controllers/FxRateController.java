@@ -23,10 +23,10 @@ public class FxRateController {
         this.service = service;
     }
 
-    @GetMapping(path="/FxRatesHistory")
-    public List<FxRate> getFxRatesHistory(
+    @GetMapping(path="/FxRatesForCurrency")
+    public List<FxRate> getFxRatesForCurrency(
             @RequestBody Currency targetCurrency) {
-        return service.findFxRateHistory(targetCurrency);
+        return service.findFxRatesForCurrency(targetCurrency);
     }
 
     @GetMapping(path="/FxRates")

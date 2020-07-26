@@ -26,6 +26,12 @@ public class WebcurrencyratetrackerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 //		repository.save(new FxRate(null, Currency.EUR, Currency.USD, 1.16d, LocalDate.parse("2020-07-25")));
-		ltbFxRateService.getCurrentFxRate();
+		ltbFxRateService.getCurrentFxRates();
+		ltbFxRateService.getFxRatesForCurrency(
+				Currency.valueOf("USD"), LocalDate.parse("2020-06-01"), LocalDate.parse("2020-08-01"));
+		ltbFxRateService.getFxRatesForCurrency(
+				Currency.valueOf("GBP"), LocalDate.parse("2020-06-01"), LocalDate.parse("2020-08-01"));
+		ltbFxRateService.getFxRatesForCurrency(
+				Currency.valueOf("CAD"), LocalDate.parse("2020-06-01"), LocalDate.parse("2020-08-01"));
 	}
 }
