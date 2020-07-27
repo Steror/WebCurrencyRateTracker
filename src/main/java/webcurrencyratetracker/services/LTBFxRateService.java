@@ -1,5 +1,9 @@
 package webcurrencyratetracker.services;
 
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import webcurrencyratetracker.handlers.LTBFxRateHandler;
 import webcurrencyratetracker.models.Currency;
 import webcurrencyratetracker.models.FxRate;
@@ -20,16 +24,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class LTBFxRateService {
+public class LTBFxRateService implements Job {
 
     private final FxRateService service;
+    private final CurrencyUpdateJobService jobService;
+
     private static final Logger logger = LoggerFactory.getLogger(LTBFxRateService.class);
     private static final String URL_CURRENTFXRATES = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=eu";
     private static final String URL_FXRATESFORCURRENCY = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=eu";
 
     @Autowired
-    public LTBFxRateService(FxRateService service) {
+    public LTBFxRateService(FxRateService service, CurrencyUpdateJobService jobService) {
         this.service = service;
+        this.jobService = jobService;
+    }
+
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        jobService.executeCurrencyUpdateJob();
     }
 
     public void getCurrentFxRates() {
