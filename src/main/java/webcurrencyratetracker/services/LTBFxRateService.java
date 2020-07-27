@@ -3,7 +3,6 @@ package webcurrencyratetracker.services;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import webcurrencyratetracker.handlers.LTBFxRateHandler;
 import webcurrencyratetracker.models.Currency;
 import webcurrencyratetracker.models.FxRate;
@@ -26,26 +25,26 @@ import java.util.List;
 @Service
 public class LTBFxRateService implements Job {
 
-    private final FxRateService service;
-    private final CurrencyUpdateJobService jobService;
+    @Autowired
+    private FxRateService service;
 
     private static final Logger logger = LoggerFactory.getLogger(LTBFxRateService.class);
-    private static final String URL_CURRENTFXRATES = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=eu";
-    private static final String URL_FXRATESFORCURRENCY = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=eu";
+    private static final String URL_CURRENT_FX_RATES = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=eu";
+    private static final String URL_FX_RATES_FOR_CURRENCY = "http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=eu";
 
-    @Autowired
-    public LTBFxRateService(FxRateService service, CurrencyUpdateJobService jobService) {
-        this.service = service;
-        this.jobService = jobService;
-    }
-
+    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        jobService.executeCurrencyUpdateJob();
+        logger.info("Job ** {} ** fired @ {}", context.getJobDetail().getKey().getName(), context.getFireTime());
+
+        logger.info("The currency update job has begun...");
+        getCurrentFxRates();
+
+        logger.info("Next job scheduled @ {}", context.getNextFireTime());
     }
 
     public void getCurrentFxRates() {
         try {
-            URLConnection connection = new URL(URL_CURRENTFXRATES).openConnection(); // Start connection to URL
+            URLConnection connection = new URL(URL_CURRENT_FX_RATES).openConnection(); // Start connection to URL
             parseFxRates(connection);
         }
         catch(IOException | SAXException ioe) {
@@ -57,7 +56,7 @@ public class LTBFxRateService implements Job {
         try {
             // Build URL
             // Example: http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=eu&ccy=usd&dtFrom=2020-06-25&dtTo=2020-07-28
-            URLConnection connection = new URL(URL_FXRATESFORCURRENCY + "&ccy=" + currency + "&dtFrom=" + dateFrom + "&dtTo=" + dateTo).openConnection(); // Start connection to URL
+            URLConnection connection = new URL(URL_FX_RATES_FOR_CURRENCY + "&ccy=" + currency + "&dtFrom=" + dateFrom + "&dtTo=" + dateTo).openConnection(); // Start connection to URL
             parseFxRates(connection);
         }
         catch(IOException | SAXException ioe) {

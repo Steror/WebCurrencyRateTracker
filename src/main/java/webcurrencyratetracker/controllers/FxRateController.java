@@ -34,11 +34,4 @@ public class FxRateController {
             @RequestBody LocalDate date) {
         return service.findFxRates(date);
     }
-
-//    @GetMapping(path="/FxRateHistory")
-//    public FxRate getFxRateForCurrencyToday(
-//            @RequestBody Currency sourceCurrency,
-//            @RequestBody Currency targetCurrency) {
-//        return service.findFxRateForCurrenciesToday(sourceCurrency, targetCurrency);
-//    }
 }

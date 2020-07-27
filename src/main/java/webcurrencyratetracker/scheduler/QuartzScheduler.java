@@ -4,17 +4,17 @@ import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import webcurrencyratetracker.config.AutoWiringSpringBeanJobFactory;
@@ -29,7 +29,6 @@ import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 @Configuration
-@ConditionalOnExpression("'${using.spring.schedulerFactory}'=='true'")
 public class QuartzScheduler {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -39,7 +38,7 @@ public class QuartzScheduler {
 
     @PostConstruct
     public void init() {
-        logger.info(getClass().getName() + " created...");
+        logger.info("Quartz Scheduler created...");
     }
 
     @Bean
@@ -52,7 +51,7 @@ public class QuartzScheduler {
     }
 
     @Bean
-    public Scheduler scheduler(Trigger trigger, JobDetail job, SchedulerFactoryBean factory) throws SchedulerException {
+    public Scheduler scheduler(Trigger trigger, JobDetail job, @Qualifier("schedulerFactoryBean") SchedulerFactoryBean factory) throws SchedulerException {
         logger.debug("Getting a handle to the Scheduler");
         Scheduler scheduler = factory.getScheduler();
         scheduler.scheduleJob(job, trigger);
@@ -72,22 +71,22 @@ public class QuartzScheduler {
 
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
 
     @Bean
     public JobDetail jobDetail() {
-
-        return newJob().ofType(LTBFxRateService.class).storeDurably().withIdentity(JobKey.jobKey("Qrtz_Job_Detail")).withDescription("Invoke Currency Update Job service...").build();
+        return newJob().ofType(LTBFxRateService.class)
+                .storeDurably()
+                .withIdentity(JobKey.jobKey("Qrtz_Job_Detail"))
+                .withDescription("Invoke Currency Update Job...")
+                .build();
     }
 
     @Bean
     public Trigger trigger(JobDetail job) {
-
-        int frequencyInSec = 86400;
-        logger.info("Configuring trigger to fire every {} seconds", frequencyInSec);
+        logger.info("Configuring trigger to fire every day at 12:00 mid-day");
 
         return newTrigger()
                 .withIdentity(TriggerKey.triggerKey("Qrtz_Trigger"))
@@ -95,6 +94,5 @@ public class QuartzScheduler {
                 .withSchedule(dailyAtHourAndMinute(12, 0))
                 .forJob(job)
                 .build();
-//        return newTrigger().forJob(job).withIdentity(TriggerKey.triggerKey("Qrtz_Trigger")).withDescription("Sample trigger").withSchedule(simpleSchedule().withIntervalInSeconds(frequencyInSec).repeatForever()).build();
     }
 }
