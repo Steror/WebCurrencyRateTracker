@@ -19,19 +19,10 @@ public interface FxRateRepository extends JpaRepository<FxRate, Long> {
     List<FxRate> findFxRatesByTargetCurrency(
             @Param("targetCurrency") Currency targetCurrency);
 
-//    select DATE, EXCHANGE_RATE, SOURCE_CURRENCY, TARGET_CURRENCY from (
-//            select * from FX_RATE order by DATE desc ) x
-//    group by TARGET_CURRENCY;
-
-    //"SELECT ID, DATE, EXCHANGE_RATE, SOURCE_CURRENCY, TARGET_CURRENCY FROM (" +
-    //                    "SELECT ID, DATE, EXCHANGE_RATE, SOURCE_CURRENCY, TARGET_CURRENCY FROM " +
-    //                    "FX_RATE f WHERE f.DATE <= :specifiedDate ORDER BY DATE DESC ) " +
-    //                    "x GROUP BY x.TARGET_CURRENCY, x.ID;"
-
+    // TODO: NEEDS TESTING
     // This query returns exchange rates equal to or before the specified date for all currencies
     @Query(value = "SELECT DISTINCT ON (TARGET_CURRENCY) SOURCE_CURRENCY, TARGET_CURRENCY, EXCHANGE_RATE, DATE FROM FX_RATE WHERE DATE <= :specifiedDate ORDER BY DATE DESC;",
             nativeQuery = true)
-//    @Query("SELECT sourceCurrency, targetCurrency, exchangeRate, date FROM FxRate WHERE date <= '2020-07-23' GROUP BY targetCurrency ORDER BY date DESC")
     List<FxRate> findFxRatesByDate(
             @Param("specifiedDate") LocalDate specifiedDate);
 
