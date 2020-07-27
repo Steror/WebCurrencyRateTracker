@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.time.LocalDate;
@@ -16,12 +17,11 @@ import java.time.LocalDate;
 @Entity
 @IdClass(FxRateId.class)
 public class FxRate {
-//    @Id
-//    @GeneratedValue
-//    private Long id;
     @Id
+    @Enumerated(EnumType.STRING)    // Strings for DB readability while manually testing
     private Currency sourceCurrency;
     @Id
+    @Enumerated(EnumType.STRING)
     private Currency targetCurrency;
     private Double exchangeRate;
     @Id
