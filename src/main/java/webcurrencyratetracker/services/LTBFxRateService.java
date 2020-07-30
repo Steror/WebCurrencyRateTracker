@@ -4,7 +4,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import webcurrencyratetracker.handlers.LTBFxRateHandler;
-import webcurrencyratetracker.models.Currency;
+import webcurrencyratetracker.models.CURRENCY;
 import webcurrencyratetracker.models.FxRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,11 +48,11 @@ public class LTBFxRateService implements Job {
             parseFxRates(connection);
         }
         catch(IOException | SAXException ioe) {
-            ioe.printStackTrace();
+            logger.trace(ioe.getMessage());
         }
     }
 
-    public void getFxRatesForCurrency(final Currency currency, final LocalDate dateFrom, final LocalDate dateTo) {
+    public void getFxRatesForCurrency(final CURRENCY currency, final LocalDate dateFrom, final LocalDate dateTo) {
         try {
             // Build URL
             // Example: http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=eu&ccy=usd&dtFrom=2020-06-25&dtTo=2020-07-28
@@ -60,7 +60,7 @@ public class LTBFxRateService implements Job {
             parseFxRates(connection);
         }
         catch(IOException | SAXException ioe) {
-            ioe.printStackTrace();
+            logger.trace(ioe.getMessage());
         }
     }
 

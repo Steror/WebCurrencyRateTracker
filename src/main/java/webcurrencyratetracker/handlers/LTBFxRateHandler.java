@@ -1,12 +1,11 @@
 package webcurrencyratetracker.handlers;
 
-import webcurrencyratetracker.models.Currency;
+import webcurrencyratetracker.models.CURRENCY;
 import webcurrencyratetracker.models.FxRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-import webcurrencyratetracker.services.LTBFxRateService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class LTBFxRateHandler extends DefaultHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(LTBFxRateService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LTBFxRateHandler.class);
     private boolean isCurrency, isExchangeRate, isDate;
     private FxRate currentFxRate;
     private final List<FxRate> fxRates = new ArrayList<>();
@@ -57,11 +56,11 @@ public class LTBFxRateHandler extends DefaultHandler {
         }
         if (isCurrency) {
             if (currentFxRate.getSourceCurrency() == null) {
-                currentFxRate.setSourceCurrency(Currency.valueOf(new String(ch, start, length)));
+                currentFxRate.setSourceCurrency(CURRENCY.valueOf(new String(ch, start, length)));
                 logger.trace("Source currency: " + currentFxRate.getSourceCurrency());
             }
             else {
-                currentFxRate.setTargetCurrency(Currency.valueOf(new String(ch, start, length)));
+                currentFxRate.setTargetCurrency(CURRENCY.valueOf(new String(ch, start, length)));
                 logger.trace("Target currency: " + currentFxRate.getTargetCurrency());
             }
         }

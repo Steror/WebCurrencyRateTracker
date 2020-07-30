@@ -31,7 +31,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Configuration
 public class QuartzScheduler {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(QuartzScheduler.class);
 
     @Autowired
     private ApplicationContext applicationContext;

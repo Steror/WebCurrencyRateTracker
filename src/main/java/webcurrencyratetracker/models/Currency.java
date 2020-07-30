@@ -1,6 +1,6 @@
 package webcurrencyratetracker.models;
 
-public enum Currency {
+public enum CURRENCY {
     EUR,
     AUD,
     BGN,

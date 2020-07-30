@@ -12,8 +12,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FxRateId implements Serializable {
-    private Currency sourceCurrency;
-    private Currency targetCurrency;
+    private CURRENCY sourceCurrency;
+    private CURRENCY targetCurrency;
     private LocalDate date;
 
     @Override

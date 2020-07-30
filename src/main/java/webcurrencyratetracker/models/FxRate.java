@@ -19,10 +19,10 @@ import java.time.LocalDate;
 public class FxRate {
     @Id
     @Enumerated(EnumType.STRING)    // Strings for DB readability while manually testing
-    private Currency sourceCurrency;
+    private CURRENCY sourceCurrency;
     @Id
     @Enumerated(EnumType.STRING)
-    private Currency targetCurrency;
+    private CURRENCY targetCurrency;
     private Double exchangeRate;
     @Id
     private LocalDate date;
